@@ -1,8 +1,11 @@
 package controllers;
 
+import DTOs.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import services.UserService;
 
 @RestController
 @RequestMapping("/users")
