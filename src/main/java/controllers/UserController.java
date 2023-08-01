@@ -28,8 +28,8 @@ public class UserController {
     //Аутентификация пользователя и получение токена
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginReq loginReq) {
-        TokenResponse tokenResponse = userService.loginUser(loginReq);
-        return ResponseEntity.ok(tokenResponse);
+        User user = userService.loginUser(loginReq);
+        return ResponseEntity.ok(user);
     }
 
     //Обновление пароля
@@ -42,14 +42,16 @@ public class UserController {
     //Получение информации о текущем пользователе
     @GetMapping("/me")
     public ResponseEntity<User> getUser() {
-        User currentUser = userService.updateUser(userUpdate);
-        return ResponseEntity.ok(updatedUser);
+        //int currentUserId = getCurrentUserId(); - заменить на реальную логику
+
+        User currentUser = userService.getUserById(1); //1 для теста
+        return ResponseEntity.ok(currentUser);
     }
 
     //Обновление изображения текущего пользователя
     @PatchMapping("/me/image")
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image){
-        userService.updateUserImage(image);
+    public ResponseEntity<Void> updateUserImage(@PathVariable int userId, @RequestParam("image") MultipartFile image){
+        userService.updateUserImage(userId,image);
         return ResponseEntity.ok().build();
     }
 }

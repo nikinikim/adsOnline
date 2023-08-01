@@ -1,6 +1,7 @@
 package services.impl;
 
 import DTOs.LoginReq;
+import DTOs.NewPassword;
 import DTOs.RegisterReq;
 import DTOs.User;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User user) {
         return user;
+    }
+
+    @Override
+    public void setPassword(NewPassword newPassword) {
+        System.out.println("Пароль успешно изменен");
     }
 
     @Override
