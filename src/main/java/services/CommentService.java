@@ -9,4 +9,6 @@ public interface CommentService {
     Comment addComment(int adId, Comment comment);
     Comment updateComment(int adId, int commentId, Comment comment);
     void deleteComment(int adId, int commentId);
+
+    Comment getCommentById(int adId, int commentId);
 }

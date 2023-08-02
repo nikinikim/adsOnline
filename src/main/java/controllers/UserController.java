@@ -44,7 +44,7 @@ public class UserController {
     public ResponseEntity<User> getUser() {
         //int currentUserId = getCurrentUserId(); - заменить на реальную логику
 
-        User currentUser = userService.getUserById(1); //1 для теста
+        User currentUser = userService.getUserById(1); //1 - для теста
         return ResponseEntity.ok(currentUser);
     }
 

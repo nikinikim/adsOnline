@@ -28,4 +28,17 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(int adId, int commentId) {
 
     }
+
+    @Override
+    public Comment getCommentById(int adId, int commentId) {
+        // Тестовые данные для заглушки
+
+        Comment comment = new Comment();
+        comment.setAuthor(1);
+        comment.setCreatedAt("2023-07-27");
+        comment.setPk(1);
+        comment.setText("Test comment");
+
+        return comment;
+    }
 }

@@ -25,10 +25,10 @@ public class AdController {
 
     // Получение списка всех объявлений
     @GetMapping
-    public ResponseEntity<ResponseWrapperAds> getAllAds() {
+    public ResponseEntity<ResponsesWrapperAds> getAllAds() {
         List<Ads> adsList = adService.getAllAds();
         int totalAds = adsList.size();
-        ResponseWrapperAds response = new ResponseWrapperAds(totalAds, adsList);
+        ResponsesWrapperAds response = new ResponsesWrapperAds();
         return ResponseEntity.ok(response);
     }
 
@@ -72,34 +72,34 @@ public class AdController {
 
     // Добавление комментария к объявлению
     @PostMapping("/{ad_pk}/comments")
-    public ResponseEntity<Comment> addComments(@PathVariable("ad_pk") String adId,
+    public ResponseEntity<Comment> addComments(@PathVariable("ad_pk") int adId,
                                                @RequestBody Comment comment) {
-        Comment newComment = CommentService.addComment(adId, comment);
+        Comment newComment = commentService.addComment(adId, comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
     }
 
     // Получение информации о конкретном комментарии
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<Comment> getComments(@PathVariable("ad_pk") String adId,
+    public ResponseEntity<Comment> getComments(@PathVariable("ad_pk") int adId,
                                                @PathVariable int id) {
-        Comment comment = adService.getCommentById(adId, id);
+        Comment comment = commentService.getCommentById(adId, id);
         return ResponseEntity.ok(comment);
     }
 
     // Обновление информации о конкретном комментарии
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<Comment> updateComments(@PathVariable("ad_pk") String adId,
+    public ResponseEntity<Comment> updateComments(@PathVariable("ad_pk") int adId,
                                                   @PathVariable int id,
                                                   @RequestBody Comment commentUpdate) {
-        Comment updatedComment = adService.updateComment(adId, id, commentUpdate);
+        Comment updatedComment = commentService.updateComment(adId, id, commentUpdate);
         return ResponseEntity.ok(updatedComment);
     }
 
     // Удаление конкретного комментария
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") String adId,
+    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
                                                @PathVariable int id) {
-        adService.deleteComment(adId, id);
+        commentService.deleteComment(adId, id);
         return ResponseEntity.ok().build();
     }
 }
