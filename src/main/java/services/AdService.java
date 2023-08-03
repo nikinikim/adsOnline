@@ -1,7 +1,7 @@
 package services;
 
 import DTOs.Ads;
-import DTOs.Comment;
+import DTOs.CommentDTO;
 import DTOs.CreateAds;
 import DTOs.FullAds;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,5 +19,5 @@ public interface AdService {
 
     FullAds getFullAdById(int id);
 
-    List<Comment> getCommentsForAd(int adId);
+    List<CommentDTO> getCommentsForAd(int adId);
 }

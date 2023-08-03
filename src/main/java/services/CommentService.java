@@ -1,14 +1,19 @@
 package services;
 
-import DTOs.Comment;
+import DTOs.CommentDTO;
+import entity.Comment;
 
 import java.util.List;
 
 public interface CommentService {
-    List<Comment> getCommentsByAdId(int adId);
-    Comment addComment(int adId, Comment comment);
-    Comment updateComment(int adId, int commentId, Comment comment);
+    CommentDTO mapToDTO(Comment comment);
+
+    Comment mapToEntity(CommentDTO commentDTO);
+
+    List<CommentDTO> getCommentsByAdId(int adId);
+    CommentDTO addComment(int adId, CommentDTO comment);
+    CommentDTO updateComment(int adId, int commentId, CommentDTO comment);
     void deleteComment(int adId, int commentId);
 
-    Comment getCommentById(int adId, int commentId);
+    CommentDTO getCommentById(int adId, int commentId);
 }

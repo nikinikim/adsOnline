@@ -1,7 +1,7 @@
 package services.impl;
 
 import DTOs.Ads;
-import DTOs.Comment;
+import DTOs.CommentDTO;
 import DTOs.CreateAds;
 import DTOs.FullAds;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class AdServiceImpl implements AdService {
 
     //Тестовые данные (потом необходимо удалить)
     private List<Ads> adsList;
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
 
     @Override
     public List<Ads> getAllAds() {
@@ -53,16 +53,16 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Comment> getCommentsForAd(int adId) {
-        List<Comment> comments = new ArrayList<>();
-        Comment comment1 = new Comment();
+    public List<CommentDTO> getCommentsForAd(int adId) {
+        List<CommentDTO> comments = new ArrayList<>();
+        CommentDTO comment1 = new CommentDTO();
         comment1.setAuthor(1);
         comment1.setCreatedAt("2023-07-27");
         comment1.setPk(1);
         comment1.setText("Test comment 1");
         comments.add(comment1);
 
-        Comment comment2 = new Comment();
+        CommentDTO comment2 = new CommentDTO();
         comment2.setAuthor(2);
         comment2.setCreatedAt("2023-07-28");
         comment2.setPk(2);
