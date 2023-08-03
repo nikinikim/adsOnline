@@ -2,7 +2,7 @@ package DTOs;
 
 import java.util.List;
 
-public class ResponseWrapperComment {
+public class ResponseWrapperCommentDTO {
     private int count;
     private List<CommentDTO> results;
 

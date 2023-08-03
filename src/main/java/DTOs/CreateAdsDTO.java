@@ -1,6 +1,6 @@
 package DTOs;
 
-public class CreateAds {
+public class CreateAdsDTO {
     private String description;
     private int price;
     private String title;

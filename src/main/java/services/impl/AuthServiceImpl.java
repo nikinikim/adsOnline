@@ -1,20 +1,20 @@
 package services.impl;
 
-import DTOs.LoginReq;
-import DTOs.RegisterReq;
-import DTOs.User;
+import DTOs.LoginReqDTO;
+import DTOs.RegisterReqDTO;
+import DTOs.UserDTO;
 import org.springframework.stereotype.Service;
 import services.AuthService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
     @Override
-    public User registerUser(RegisterReq registerReq) {
+    public UserDTO registerUser(RegisterReqDTO registerReq) {
         return null;
     }
 
     @Override
-    public User login(LoginReq loginReq) {
+    public UserDTO login(LoginReqDTO loginReq) {
         return null;
     }
 }

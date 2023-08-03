@@ -1,6 +1,6 @@
 package DTOs;
 
-public class User {
+public class UserDTO {
 
     private String email;
     private String firstName;

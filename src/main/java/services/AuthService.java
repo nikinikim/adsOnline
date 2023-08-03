@@ -1,12 +1,12 @@
 package services;
 
-import DTOs.LoginReq;
-import DTOs.RegisterReq;
-import DTOs.User;
+import DTOs.LoginReqDTO;
+import DTOs.RegisterReqDTO;
+import DTOs.UserDTO;
 
 public interface AuthService {
-    User registerUser(RegisterReq registerReq);
+    UserDTO registerUser(RegisterReqDTO registerReq);
 
-    User login(LoginReq loginReq);
+    UserDTO login(LoginReqDTO loginReq);
 
 }

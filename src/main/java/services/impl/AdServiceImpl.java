@@ -1,9 +1,9 @@
 package services.impl;
 
-import DTOs.Ads;
+import DTOs.AdsDTO;
 import DTOs.CommentDTO;
-import DTOs.CreateAds;
-import DTOs.FullAds;
+import DTOs.CreateAdsDTO;
+import DTOs.FullAdsDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import services.AdService;
@@ -15,27 +15,27 @@ import java.util.List;
 public class AdServiceImpl implements AdService {
 
     //Тестовые данные (потом необходимо удалить)
-    private List<Ads> adsList;
+    private List<AdsDTO> adsList;
     private List<CommentDTO> comments;
 
     @Override
-    public List<Ads> getAllAds() {
+    public List<AdsDTO> getAllAds() {
         return new ArrayList<>();
     }
 
     @Override
-    public Ads getAdById(int id) {
-        return new Ads();
+    public AdsDTO getAdById(int id) {
+        return new AdsDTO();
     }
 
     @Override
-    public Ads createAd(Ads ad) {
-        return new Ads();
+    public AdsDTO createAd(AdsDTO ad) {
+        return new AdsDTO();
     }
 
     @Override
-    public Ads updateAd(int id, CreateAds ad) {
-        return new Ads();
+    public AdsDTO updateAd(int id, CreateAdsDTO ad) {
+        return new AdsDTO();
     }
 
     @Override
@@ -44,12 +44,12 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ads addAd(MultipartFile image, CreateAds createAds) {
-        return new Ads();
+    public AdsDTO addAd(MultipartFile image, CreateAdsDTO createAds) {
+        return new AdsDTO();
     }
     @Override
-    public FullAds getFullAdById(int id) {
-        return new FullAds();
+    public FullAdsDTO getFullAdById(int id) {
+        return new FullAdsDTO();
     }
 
     @Override

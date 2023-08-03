@@ -2,7 +2,7 @@ package DTOs;
 
 import java.util.List;
 
-public class Ads {
+public class AdsDTO {
     private int author;
     private List<String> image;
     private int pk;

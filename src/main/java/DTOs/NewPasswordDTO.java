@@ -1,6 +1,6 @@
 package DTOs;
 
-public class NewPassword {
+public class NewPasswordDTO {
 
     private String currentPassword;
     private String newPassword;

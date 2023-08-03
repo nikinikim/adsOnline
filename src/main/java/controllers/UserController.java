@@ -20,23 +20,23 @@ public class UserController {
 
     //Создание нового пользователя
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterReq registerReq) {
+    public ResponseEntity<UserDTO> register(@RequestBody RegisterReqDTO registerReq) {
 
-        User newUser = userService.registerUser(registerReq);
+        UserDTO newUser = userService.registerUser(registerReq);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     //Аутентификация пользователя и получение токена
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginReq loginReq) {
+    public ResponseEntity<Object> login(@RequestBody LoginReqDTO loginReq) {
 
-        User user = userService.loginUser(loginReq);
+        UserDTO user = userService.loginUser(loginReq);
         return ResponseEntity.ok(user);
     }
 
     //Обновление пароля
     @PostMapping("/set_password")
-    public ResponseEntity<String> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<String> setPassword(@RequestBody NewPasswordDTO newPassword) {
 
         userService.setPassword(newPassword);
         return ResponseEntity.ok("Пароль успешно изменен");
@@ -44,10 +44,10 @@ public class UserController {
 
     //Получение информации о текущем пользователе
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
+    public ResponseEntity<UserDTO> getUser() {
         //int currentUserId = getCurrentUserId(); - заменить на реальную логику
 
-        User currentUser = userService.getUserById(1); //1 - для теста
+        UserDTO currentUser = userService.getUserById(1); //1 - для теста
         return ResponseEntity.ok(currentUser);
     }
 

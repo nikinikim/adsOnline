@@ -2,7 +2,7 @@ package DTOs;
 
 import java.util.List;
 
-public class FullAds {
+public class FullAdsDTO {
     private String authorFirstName;
     private String authorLastName;
     private String description;

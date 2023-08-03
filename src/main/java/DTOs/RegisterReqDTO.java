@@ -1,6 +1,6 @@
 package DTOs;
 
-public class RegisterReq {
+public class RegisterReqDTO {
 
     private String username;
     private String password;

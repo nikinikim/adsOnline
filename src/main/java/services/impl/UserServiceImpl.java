@@ -1,9 +1,9 @@
 package services.impl;
 
-import DTOs.LoginReq;
-import DTOs.NewPassword;
-import DTOs.RegisterReq;
-import DTOs.User;
+import DTOs.LoginReqDTO;
+import DTOs.NewPasswordDTO;
+import DTOs.RegisterReqDTO;
+import DTOs.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import services.UserService;
@@ -12,32 +12,32 @@ import services.UserService;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User registerUser(RegisterReq registerReq) {
+    public UserDTO registerUser(RegisterReqDTO registerReq) {
         return null;
     }
 
     @Override
-    public User loginUser(LoginReq loginReq) {
+    public UserDTO loginUser(LoginReqDTO loginReq) {
         return null;
     }
 
     @Override
-    public User getUserById(int userId) {
-        return new User();
+    public UserDTO getUserById(int userId) {
+        return new UserDTO();
     }
 
     @Override
-    public User updateUser(User user) {
+    public UserDTO updateUser(UserDTO user) {
         return user;
     }
 
     @Override
-    public void setPassword(NewPassword newPassword) {
+    public void setPassword(NewPasswordDTO newPassword) {
         System.out.println("Пароль успешно изменен");
     }
 
     @Override
-    public User updateUserImage(int id, MultipartFile image) {
-        return new User();
+    public UserDTO updateUserImage(int id, MultipartFile image) {
+        return new UserDTO();
     }
 }

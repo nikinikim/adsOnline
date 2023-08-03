@@ -26,36 +26,36 @@ public class AdController {
 
     // Получение списка всех объявлений
     @GetMapping
-    public ResponseEntity<ResponsesWrapperAds> getAllAds() {
+    public ResponseEntity<ResponsesWrapperAdsDTO> getAllAds() {
 
-        List<Ads> adsList = adService.getAllAds();
+        List<AdsDTO> adsList = adService.getAllAds();
         int totalAds = adsList.size();
-        ResponsesWrapperAds response = new ResponsesWrapperAds();
+        ResponsesWrapperAdsDTO response = new ResponsesWrapperAdsDTO();
         return ResponseEntity.ok(response);
     }
 
     // Добавление нового объявления
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestPart("image") MultipartFile image,
-                                      @RequestPart("properties") CreateAds createAds) {
+    public ResponseEntity<AdsDTO> addAds(@RequestPart("image") MultipartFile image,
+                                         @RequestPart("properties") CreateAdsDTO createAds) {
 
-        Ads newAd = adService.addAd(image, createAds);
+        AdsDTO newAd = adService.addAd(image, createAds);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
     }
 
     // Получение информации о конкретном объявлении
     @GetMapping("/{id}")
-    public ResponseEntity<FullAds> getFullAd(@PathVariable int id) {
+    public ResponseEntity<FullAdsDTO> getFullAd(@PathVariable int id) {
 
-        FullAds fullAd = adService.getFullAdById(id);
+        FullAdsDTO fullAd = adService.getFullAdById(id);
         return ResponseEntity.ok(fullAd);
     }
 
     // Обновление информации о конкретном объявлении
     @PatchMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable int id, @RequestBody CreateAds updateAds) {
+    public ResponseEntity<AdsDTO> updateAds(@PathVariable int id, @RequestBody CreateAdsDTO updateAds) {
 
-        Ads updatedAd = adService.updateAd(id, updateAds);
+        AdsDTO updatedAd = adService.updateAd(id, updateAds);
         return ResponseEntity.ok(updatedAd);
     }
 
@@ -69,11 +69,11 @@ public class AdController {
 
     // Получение списка комментариев для конкретного объявления
     @GetMapping("/{ad_pk}/comments")
-    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("ad_pk") int adId) {
+    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
 
         List<CommentDTO> comments = adService.getCommentsForAd(adId);
         int totalComments = comments.size();
-        ResponseWrapperComment response = new ResponseWrapperComment();
+        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
         return ResponseEntity.ok(response);
     }
 
