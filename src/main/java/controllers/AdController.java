@@ -19,6 +19,7 @@ public class AdController {
     private final CommentService commentService;
 
     public AdController(AdService adService, CommentService commentService) {
+
         this.adService = adService;
         this.commentService = commentService;
     }
@@ -26,6 +27,7 @@ public class AdController {
     // Получение списка всех объявлений
     @GetMapping
     public ResponseEntity<ResponsesWrapperAds> getAllAds() {
+
         List<Ads> adsList = adService.getAllAds();
         int totalAds = adsList.size();
         ResponsesWrapperAds response = new ResponsesWrapperAds();
@@ -36,6 +38,7 @@ public class AdController {
     @PostMapping
     public ResponseEntity<Ads> addAds(@RequestPart("image") MultipartFile image,
                                       @RequestPart("properties") CreateAds createAds) {
+
         Ads newAd = adService.addAd(image, createAds);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
     }
@@ -43,6 +46,7 @@ public class AdController {
     // Получение информации о конкретном объявлении
     @GetMapping("/{id}")
     public ResponseEntity<FullAds> getFullAd(@PathVariable int id) {
+
         FullAds fullAd = adService.getFullAdById(id);
         return ResponseEntity.ok(fullAd);
     }
@@ -50,6 +54,7 @@ public class AdController {
     // Обновление информации о конкретном объявлении
     @PatchMapping("/{id}")
     public ResponseEntity<Ads> updateAds(@PathVariable int id, @RequestBody CreateAds updateAds) {
+
         Ads updatedAd = adService.updateAd(id, updateAds);
         return ResponseEntity.ok(updatedAd);
     }
@@ -57,6 +62,7 @@ public class AdController {
     // Удаление конкретного объявления
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeAd(@PathVariable int id) {
+
         adService.removeAd(id);
         return ResponseEntity.noContent().build();
     }
@@ -64,6 +70,7 @@ public class AdController {
     // Получение списка комментариев для конкретного объявления
     @GetMapping("/{ad_pk}/comments")
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("ad_pk") int adId) {
+
         List<Comment> comments = adService.getCommentsForAd(adId);
         int totalComments = comments.size();
         ResponseWrapperComment response = new ResponseWrapperComment();
@@ -74,6 +81,7 @@ public class AdController {
     @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<Comment> addComments(@PathVariable("ad_pk") int adId,
                                                @RequestBody Comment comment) {
+
         Comment newComment = commentService.addComment(adId, comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
     }
@@ -82,6 +90,7 @@ public class AdController {
     @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<Comment> getComments(@PathVariable("ad_pk") int adId,
                                                @PathVariable int id) {
+
         Comment comment = commentService.getCommentById(adId, id);
         return ResponseEntity.ok(comment);
     }
@@ -91,6 +100,7 @@ public class AdController {
     public ResponseEntity<Comment> updateComments(@PathVariable("ad_pk") int adId,
                                                   @PathVariable int id,
                                                   @RequestBody Comment commentUpdate) {
+
         Comment updatedComment = commentService.updateComment(adId, id, commentUpdate);
         return ResponseEntity.ok(updatedComment);
     }
@@ -99,6 +109,7 @@ public class AdController {
     @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
                                                @PathVariable int id) {
+
         commentService.deleteComment(adId, id);
         return ResponseEntity.ok().build();
     }

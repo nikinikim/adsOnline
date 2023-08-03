@@ -23,6 +23,7 @@ public class ImageController {
     // Обновление изображения объявления по идентификатору
     @PatchMapping("/{id}")
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable int id, @RequestParam("image") MultipartFile image) throws IOException {
+
         byte[] updatedImage = imageService.updateAdImages(id, image);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(updatedImage);
     }

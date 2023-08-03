@@ -21,6 +21,7 @@ public class UserController {
     //Создание нового пользователя
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterReq registerReq) {
+
         User newUser = userService.registerUser(registerReq);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
@@ -28,6 +29,7 @@ public class UserController {
     //Аутентификация пользователя и получение токена
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginReq loginReq) {
+
         User user = userService.loginUser(loginReq);
         return ResponseEntity.ok(user);
     }
@@ -35,6 +37,7 @@ public class UserController {
     //Обновление пароля
     @PostMapping("/set_password")
     public ResponseEntity<String> setPassword(@RequestBody NewPassword newPassword) {
+
         userService.setPassword(newPassword);
         return ResponseEntity.ok("Пароль успешно изменен");
     }
@@ -51,6 +54,7 @@ public class UserController {
     //Обновление изображения текущего пользователя
     @PatchMapping("/me/image")
     public ResponseEntity<Void> updateUserImage(@PathVariable int userId, @RequestParam("image") MultipartFile image){
+
         userService.updateUserImage(userId,image);
         return ResponseEntity.ok().build();
     }
