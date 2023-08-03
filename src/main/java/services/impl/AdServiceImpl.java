@@ -72,7 +72,6 @@ public class AdServiceImpl implements AdService {
 
         return comments;
     }
-
     @Override
     public AdsDTO addToDTO(Ads ads) {
         AdsDTO adsDTO = new AdsDTO();

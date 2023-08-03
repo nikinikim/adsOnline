@@ -44,7 +44,6 @@ public class Ads {
     public int getAuthor() {
         return author;
     }
-
     public void setAuthor(int author) {
         this.author = author;
     }

@@ -24,6 +24,4 @@ public interface AdService {
 
     AdsDTO addToDTO(Ads ads);
     Ads addToEntity(AdsDTO adsDTO);
-
-
 }
