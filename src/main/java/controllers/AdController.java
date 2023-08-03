@@ -26,7 +26,7 @@ public class AdController {
     // Получение списка всех объявлений
     @GetMapping
     public ResponseEntity<ResponsesWrapperAds> getAllAds() {
-        List<Ads> adsList = adService.getAllAds();
+        List<AdsDTO> adsList = adService.getAllAds();
         int totalAds = adsList.size();
         ResponsesWrapperAds response = new ResponsesWrapperAds();
         return ResponseEntity.ok(response);
@@ -34,9 +34,9 @@ public class AdController {
 
     // Добавление нового объявления
     @PostMapping
-    public ResponseEntity<Ads> addAds(@RequestPart("image") MultipartFile image,
-                                      @RequestPart("properties") CreateAds createAds) {
-        Ads newAd = adService.addAd(image, createAds);
+    public ResponseEntity<AdsDTO> addAds(@RequestPart("image") MultipartFile image,
+                                         @RequestPart("properties") CreateAds createAds) {
+        AdsDTO newAd = adService.addAd(image, createAds);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAd);
     }
 
@@ -49,8 +49,8 @@ public class AdController {
 
     // Обновление информации о конкретном объявлении
     @PatchMapping("/{id}")
-    public ResponseEntity<Ads> updateAds(@PathVariable int id, @RequestBody CreateAds updateAds) {
-        Ads updatedAd = adService.updateAd(id, updateAds);
+    public ResponseEntity<AdsDTO> updateAds(@PathVariable int id, @RequestBody CreateAds updateAds) {
+        AdsDTO updatedAd = adService.updateAd(id, updateAds);
         return ResponseEntity.ok(updatedAd);
     }
 

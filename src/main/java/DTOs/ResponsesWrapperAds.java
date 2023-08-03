@@ -5,7 +5,7 @@ import java.util.List;
 public class ResponsesWrapperAds {
 
     private int count;
-    private List<Ads> results;
+    private List<AdsDTO> results;
 
     public int getCount() {
         return count;
@@ -15,11 +15,11 @@ public class ResponsesWrapperAds {
         this.count = count;
     }
 
-    public List<Ads> getResults() {
+    public List<AdsDTO> getResults() {
         return results;
     }
 
-    public void setResults(List<Ads> results) {
+    public void setResults(List<AdsDTO> results) {
         this.results = results;
     }
 }
