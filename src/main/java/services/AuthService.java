@@ -1,12 +1,16 @@
 package services;
 
-import DTOs.LoginReqDTO;
 import DTOs.RegisterReqDTO;
-import DTOs.UserDTO;
+import DTOs.RoleDTO;
+import entity.RegisterReq;
 
 public interface AuthService {
-    UserDTO registerUser(RegisterReqDTO registerReq);
+    RegisterReqDTO mapToDTO(RegisterReq registerReq);
 
-    UserDTO login(LoginReqDTO loginReq);
+    RegisterReq mapToEntity(RegisterReqDTO registerReqDTO);
+
+
+        boolean login(String userName, String password);
+        boolean register(RegisterReqDTO registerReqDTO, RoleDTO roleDTO);
 
 }

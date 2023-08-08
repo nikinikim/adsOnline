@@ -1,17 +1,23 @@
 package services;
 
 import DTOs.LoginReqDTO;
-import DTOs.NewPasswordDTO;
-import DTOs.RegisterReqDTO;
+import DTOs.PasswordDTO;
 import DTOs.UserDTO;
+import entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface UserService {
-    UserDTO registerUser(RegisterReqDTO registerReq);
-    UserDTO loginUser(LoginReqDTO loginReq);
-    UserDTO getUserById(int userId);
-    UserDTO updateUser(UserDTO user);
+import java.util.Optional;
 
-    void setPassword(NewPasswordDTO newPassword);
-    UserDTO updateUserImage(int id, MultipartFile image);
+public interface UserService {
+    UserDTO mapToDTO(User user);
+
+    User mapToEntity(UserDTO userDTO);
+
+    User updateUser(User user);
+
+    void setPassword(PasswordDTO newPassword);
+
+    Optional<User> getUserById(Long userId);
+
+    void updateUserImage(Long id, MultipartFile multipartFile);
 }
