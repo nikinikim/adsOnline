@@ -1,15 +1,12 @@
 package services;
 
-import DTOs.AdsDTO;
-import DTOs.CommentDTO;
-import DTOs.CreateAdsDTO;
-import DTOs.FullAdsDTO;
+import DTOs.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface AdService {
-    List<AdsDTO> getAllAds();
+public interface AdsService {
+    ResponsesWrapperAdsDTO getAllAds();
     AdsDTO getAdById(int id);
     AdsDTO createAd(AdsDTO ad);
     AdsDTO updateAd(int id, CreateAdsDTO ad);
@@ -17,7 +14,7 @@ public interface AdService {
 
     AdsDTO addAd(MultipartFile image, CreateAdsDTO createAds);
 
-    FullAdsDTO getFullAdById(int id);
+    FullAdsDTO getFullAdById(Long id);
 
     List<CommentDTO> getCommentsForAd(int adId);
 }
