@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Nikolay
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: author
+                  type: INT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: pk
+                  type: INT
+              - column:
+                  name: text
+                  type: VARCHAR(255)
