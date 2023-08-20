@@ -1,12 +1,18 @@
-package controllers;
+package com.example.adsonline.controllers;
 
-import DTOs.*;
+import com.example.adsonline.DTOs.*;
+import com.example.adsonline.services.AdService;
+import com.example.adsonline.services.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import services.AdService;
-import services.CommentService;
 
 import java.util.List;
 
@@ -35,9 +41,15 @@ public class AdController {
     }
 
     // Добавление нового объявления
-    @PostMapping
-    public ResponseEntity<AdsDTO> addAds(@RequestPart("image") MultipartFile image,
-                                         @RequestPart("properties") CreateAdsDTO createAds) {
+    @Operation(summary = "Добавление объявления", description = "")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdsDTO.class))),
+
+            @ApiResponse(responseCode = "401", description = "Unauthorized") })
+    @PostMapping(produces = { "application/json" },
+                 consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdsDTO> addAds(@RequestParam("properties") CreateAdsDTO createAds,
+                                         @RequestPart("file") MultipartFile image) {
 
         AdsDTO newAd = adService.addAd(image, createAds);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAd);

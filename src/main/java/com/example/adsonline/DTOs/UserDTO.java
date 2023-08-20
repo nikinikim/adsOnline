@@ -1,4 +1,4 @@
-package DTOs;
+package com.example.adsonline.DTOs;
 
 import entity.NewPassword;
 import entity.RegisterReq;

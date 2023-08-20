@@ -1,4 +1,4 @@
-package DTOs;
+package com.example.adsonline.DTOs;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
-package services.impl;
+package com.example.adsonline.services.impl;
 
+import com.example.adsonline.services.ImageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import services.ImageService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ImageServiceImpl implements ImageService {

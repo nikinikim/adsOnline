@@ -1,12 +1,12 @@
-package services.impl;
+package com.example.adsonline.services.impl;
 
-import DTOs.AdsDTO;
-import DTOs.CommentDTO;
-import DTOs.CreateAdsDTO;
-import DTOs.FullAdsDTO;
+import com.example.adsonline.DTOs.AdsDTO;
+import com.example.adsonline.DTOs.CommentDTO;
+import com.example.adsonline.DTOs.CreateAdsDTO;
+import com.example.adsonline.DTOs.FullAdsDTO;
+import com.example.adsonline.services.AdService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import services.AdService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,17 +56,17 @@ public class AdServiceImpl implements AdService {
     public List<CommentDTO> getCommentsForAd(int adId) {
         List<CommentDTO> comments = new ArrayList<>();
         CommentDTO comment1 = new CommentDTO();
-        comment1.setAuthor(1);
-        comment1.setCreatedAt("2023-07-27");
-        comment1.setPk(1);
-        comment1.setText("Test comment 1");
+//        comment1.setAuthor(1);
+//        comment1.setCreatedAt("2023-07-27");
+//        comment1.setPk(1);
+//        comment1.setText("Test comment 1");
         comments.add(comment1);
 
         CommentDTO comment2 = new CommentDTO();
-        comment2.setAuthor(2);
-        comment2.setCreatedAt("2023-07-28");
-        comment2.setPk(2);
-        comment2.setText("Test comment 2");
+//        comment2.setAuthor(2);
+//        comment2.setCreatedAt("2023-07-28");
+//        comment2.setPk(2);
+//        comment2.setText("Test comment 2");
         comments.add(comment2);
 
         return comments;

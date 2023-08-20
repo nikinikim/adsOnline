@@ -1,9 +1,9 @@
-package services;
+package com.example.adsonline.services;
 
-import DTOs.AdsDTO;
-import DTOs.CommentDTO;
-import DTOs.CreateAdsDTO;
-import DTOs.FullAdsDTO;
+import com.example.adsonline.DTOs.AdsDTO;
+import com.example.adsonline.DTOs.CommentDTO;
+import com.example.adsonline.DTOs.CreateAdsDTO;
+import com.example.adsonline.DTOs.FullAdsDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

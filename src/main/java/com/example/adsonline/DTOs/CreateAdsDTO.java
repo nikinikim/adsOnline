@@ -1,4 +1,4 @@
-package DTOs;
+package com.example.adsonline.DTOs;
 
 public class CreateAdsDTO {
     private String description;

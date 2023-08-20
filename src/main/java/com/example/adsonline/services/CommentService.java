@@ -1,14 +1,14 @@
-package services;
+package com.example.adsonline.services;
 
-import DTOs.CommentDTO;
-import entity.Comment;
+import com.example.adsonline.DTOs.CommentDTO;
+import com.example.adsonline.entity.Comment;
 
 import java.util.List;
 
 public interface CommentService {
-    CommentDTO mapToDTO(Comment comment);
+    //CommentDTO mapToDTO(Comment comment);
 
-    Comment mapToEntity(CommentDTO commentDTO);
+    //Comment mapToEntity(CommentDTO commentDTO);
 
     List<CommentDTO> getCommentsByAdId(int adId);
     CommentDTO addComment(int adId, CommentDTO comment);
