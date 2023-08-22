@@ -12,16 +12,16 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "ad")
-public class Ad {
+@Table(name = "ads")
+public class Ads {
 
     /**
      * Идентификатор
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "idAds", nullable = false)
+    private Long idAds;
     /**
      * Заголовок объявления
      */
@@ -40,7 +40,7 @@ public class Ad {
     /**
      * Картинки
      */
-    @OneToMany(mappedBy = "ad")
+    @OneToMany(mappedBy = "ads")
     private Set<Image> images = new LinkedHashSet<>();
     /**
      * Автор

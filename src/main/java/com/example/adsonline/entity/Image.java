@@ -22,7 +22,7 @@ public class Image {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ad_id", nullable = false)
-    private Ad ad;
+    private Ads ad;
     /**
      * Ссылка на картинку
      */
