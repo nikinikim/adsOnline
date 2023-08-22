@@ -58,6 +58,6 @@ public class User {
      * Объявления пользователя
      */
     @OneToMany(mappedBy = "user")
-    private Set<Ad> ads = new LinkedHashSet<>();
+    private Set<Ads> ads = new LinkedHashSet<>();
 
 }
