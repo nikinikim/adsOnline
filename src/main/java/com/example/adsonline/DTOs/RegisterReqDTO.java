@@ -11,7 +11,7 @@ public class RegisterReqDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private RoleDTO roleDTO;
+    private DTOs.RoleDTO roleDTO;
 
     public String getUsername() {
         return username;
@@ -53,11 +53,13 @@ public class RegisterReqDTO {
         this.phone = phone;
     }
 
-    public RoleDTO getRoleDTO() {
+    public DTOs.RoleDTO getRoleDTO() {
         return roleDTO;
     }
 
-    public void setRoleDTO(RoleDTO roleDTO) {
+    public void setRoleDTO(DTOs.RoleDTO roleDTO) {
         this.roleDTO = roleDTO;
     }
+
+
 }

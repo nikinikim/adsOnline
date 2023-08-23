@@ -1,13 +1,15 @@
-package services.impl;
+package com.example.adsonline.services.impl;
 
-import DTOs.*;
-import entity.User;
+import com.example.adsonline.DTOs.NewPasswordDTO;
+import com.example.adsonline.DTOs.UserDTO;
+import com.example.adsonline.entity.User;
+import com.example.adsonline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import repository.UserRepository;
-import services.UserService;
+import com.example.adsonline.repository.UserRepository;
+
 
 import javax.swing.*;
 import java.io.File;
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setCity(user.getCity());
         userDTO.setPhone(user.getPhone());
-        userDTO.setImage(user.getImage());
+        userDTO.setImageRef(user.getImageRef());
         userDTO.setRegDate(user.getRegDate());
 
         return userDTO;
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setCity(userDTO.getCity());
         user.setPhone(userDTO.getPhone());
-        user.setImage(userDTO.getImage());
+        user.setImageRef(userDTO.getImageRef());
         user.setRegDate(userDTO.getRegDate());
 
         return user;

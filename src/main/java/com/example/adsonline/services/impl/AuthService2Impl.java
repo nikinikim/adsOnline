@@ -1,23 +1,24 @@
-package services.impl;
+package com.example.adsonline.services.impl;
 
 
-import DTOs.RegisterReqDTO;
+import com.example.adsonline.DTOs.RegisterReqDTO;
 import DTOs.RoleDTO;
-import entity.RegisterReq;
+
+import com.example.adsonline.entity.RegisterReq;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import services.AuthService;
+import com.example.adsonline.services.AuthService2;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class AuthService2Impl implements AuthService2 {
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager) {
+    public AuthService2Impl(UserDetailsManager manager) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
     }

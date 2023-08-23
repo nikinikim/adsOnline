@@ -1,7 +1,7 @@
 package com.example.adsonline.DTOs;
 
-import entity.NewPassword;
-import entity.RegisterReq;
+import com.example.adsonline.entity.NewPassword;
+import com.example.adsonline.entity.RegisterReq;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ public class UserDTO {
     private String phone;
     private String regDate;
     private String city;
-    private String image;
+    private String imageRef;
     private NewPassword newPassword;
     private RegisterReq registerReq;
 

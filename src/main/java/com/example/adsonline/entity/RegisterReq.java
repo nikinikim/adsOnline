@@ -1,4 +1,4 @@
-package entity;
+package com.example.adsonline.entity;
 
 import DTOs.RoleDTO;
 

@@ -11,6 +11,7 @@ import com.example.adsonline.services.AdsService;
 import com.example.adsonline.services.ImageService;
 import com.example.adsonline.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

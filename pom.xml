@@ -80,6 +80,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.fanzezhen/swager -->
+        <dependency>
+            <groupId>com.github.fanzezhen</groupId>
+            <artifactId>swager</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

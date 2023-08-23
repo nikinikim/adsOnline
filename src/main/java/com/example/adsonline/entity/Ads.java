@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;

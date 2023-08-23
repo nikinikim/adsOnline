@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -59,5 +60,28 @@ public class User {
      */
     @OneToMany(mappedBy = "user")
     private Set<Ads> ads = new LinkedHashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "new_password_id")
+    private NewPassword newPassword;
+    @ManyToOne
+    @JoinColumn(name = "register_req_id")
+    private RegisterReq registerReq;
+
+    public User(String email, String firstName, String lastName, String phone, String regDate, String city, String imageRef,
+                NewPassword newPassword, RegisterReq registerReq) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.regDate = regDate;
+        this.city = city;
+        this.imageRef = imageRef;
+        this.newPassword = newPassword;
+        this.registerReq = registerReq;
+    }
+
+    public User() {
+    }
 
 }

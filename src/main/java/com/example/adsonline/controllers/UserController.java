@@ -1,53 +1,86 @@
-package controllers;
+package com.example.adsonline.controllers;
 
-import DTOs.*;
-import entity.User;
+import com.example.adsonline.DTOs.NewPasswordDTO;
+import com.example.adsonline.DTOs.UserDTO;
+import com.example.adsonline.entity.User;
+import com.example.adsonline.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.hibernate.annotations.Parameter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import services.AuthService;
-import services.UserService;
+import com.example.adsonline.services.AuthService2;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import java.util.Optional;
-
-import static DTOs.RoleDTO.USER;
 
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(value = "http://localhost:3000")
 public class UserController {
-    private final AuthService authService;
+    private final AuthService2 authService2;
     private final UserService userService;
 
-    public UserController(AuthService authService, UserService userService) {
-        this.authService = authService;
+    public UserController(AuthService2 authService2, UserService userService) {
+        this.authService2 = authService2;
         this.userService = userService;
     }
 
 
     //Обновление пароля
-    @PostMapping("/set_password")
-    public ResponseEntity<String> setPassword(@RequestBody NewPasswordDTO newPassword) {
-
-        userService.setPassword(newPassword);
-        return ResponseEntity.ok("Пароль успешно изменен");
+    @Operation(
+            summary = "setPassword",
+            description = "for change password account",
+            tags = {"Пользователи"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = NewPasswordDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found")})
+    @PostMapping(value = "/users/set_password",
+            produces = {MediaType.APPLICATION_JSON_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<NewPasswordDTO> setPassword(
+            @RequestBody @Validated NewPasswordDTO body) {
+        if ( userService.setPassword(body);){
+            return ResponseEntity.ok(body);
+        } else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     //Получение информации о текущем пользователе
-    @GetMapping("/me")
-    public ResponseEntity<Optional<User>> getUser(Long id) {
-        //int currentUserId = getCurrentUserId(); - заменить на реальную логику
-
-        Optional<User> currentUser = userService.getUserById(id); //1 - для теста
-        return ResponseEntity.ok(currentUser);
+    @Operation(summary = "getUser",
+            description = "return info about user with authentication",
+            tags = {"Пользователи"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = UserDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found")})
+    @GetMapping(value = "me",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUserById(authentication.getName());
     }
 
     //Обновление изображения текущего пользователя
     @PatchMapping("/me/image")
-    public ResponseEntity<Void> updateUserImage(@PathVariable Long userId, @RequestParam("image") MultipartFile image){
+    public ResponseEntity<Void> updateUserImage(@PathVariable Long userId, @RequestParam("image") MultipartFile
+            image) {
 
-        userService.updateUserImage(userId,image);
+        userService.updateUserImage(userId, image);
         return ResponseEntity.ok().build();
     }
 }

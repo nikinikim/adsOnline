@@ -1,4 +1,4 @@
-package controllers;
+package com.example.adsonline.controllers;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
