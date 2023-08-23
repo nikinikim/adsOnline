@@ -25,30 +25,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    //Аутентификация пользователя и получение токена
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginReqDTO loginReqDTO) {
-        if (authService.login(loginReqDTO.getUsername(), loginReqDTO.getPassword())) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-    //Создание нового пользователя
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterReqDTO registerReqDTO) {
-        RoleDTO roleDTO = registerReqDTO.getRoleDTO() == null ? USER : registerReqDTO.getRoleDTO();
-        if (authService.register(registerReqDTO, roleDTO)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
 
     //Обновление пароля
     @PostMapping("/set_password")
-    public ResponseEntity<String> setPassword(@RequestBody PasswordDTO newPassword) {
+    public ResponseEntity<String> setPassword(@RequestBody NewPasswordDTO newPassword) {
 
         userService.setPassword(newPassword);
         return ResponseEntity.ok("Пароль успешно изменен");

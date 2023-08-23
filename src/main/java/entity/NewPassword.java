@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "new_password")
-public class Password {
+public class NewPassword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,10 +19,10 @@ public class Password {
     @Column(name = "newPassword", nullable = false)
     private String newPassword;
 
-    public Password() {
+    public NewPassword() {
     }
 
-    public Password(String currentPassword, String newPassword) {
+    public NewPassword(String currentPassword, String newPassword) {
         this.currentPassword = currentPassword;
         this.newPassword = newPassword;
     }

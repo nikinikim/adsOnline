@@ -1,6 +1,6 @@
 package DTOs;
 
-import entity.Password;
+import entity.NewPassword;
 import entity.RegisterReq;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,7 @@ public class UserDTO {
     private String regDate;
     private String city;
     private String image;
-    private Password password;
+    private NewPassword newPassword;
     private RegisterReq registerReq;
 
 

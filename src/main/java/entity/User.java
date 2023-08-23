@@ -31,13 +31,13 @@ public class User {
     private String image;
     @ManyToOne
     @JoinColumn(name = "new_password_id")
-    private Password password;
+    private NewPassword newPassword;
     @ManyToOne
     @JoinColumn(name = "register_req_id")
     private RegisterReq registerReq;
 
     public User(String email, String firstName, String lastName, String phone, String regDate, String city, String image,
-                Password password, RegisterReq registerReq) {
+                NewPassword newPassword, RegisterReq registerReq) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,7 +45,7 @@ public class User {
         this.regDate = regDate;
         this.city = city;
         this.image = image;
-        this.password = password;
+        this.newPassword = newPassword;
         this.registerReq = registerReq;
     }
 

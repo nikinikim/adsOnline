@@ -1,7 +1,6 @@
 package services;
 
-import DTOs.LoginReqDTO;
-import DTOs.PasswordDTO;
+import DTOs.NewPasswordDTO;
 import DTOs.UserDTO;
 import entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +14,7 @@ public interface UserService {
 
     User updateUser(User user);
 
-    void setPassword(PasswordDTO newPassword);
+    void setPassword(NewPasswordDTO newPassword);
 
     Optional<User> getUserById(Long userId);
 

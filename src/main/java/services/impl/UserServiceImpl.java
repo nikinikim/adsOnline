@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setPassword(PasswordDTO newPassword) {
+    public void setPassword(NewPasswordDTO newPassword) {
         System.out.println("Пароль успешно изменен");
     }
 
