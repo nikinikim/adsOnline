@@ -7,7 +7,7 @@ public class RegisterReqDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
+    private  RoleDTO role;
 
     public String getUsername() {
         return username;
@@ -49,11 +49,11 @@ public class RegisterReqDTO {
         this.phone = phone;
     }
 
-    public String getRole() {
+    public RoleDTO getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(RoleDTO role) {
         this.role = role;
     }
 }

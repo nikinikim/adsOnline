@@ -1,17 +1,29 @@
 package com.example.adsonline.services;
 
-import com.example.adsonline.DTOs.LoginReqDTO;
-import com.example.adsonline.DTOs.NewPasswordDTO;
-import com.example.adsonline.DTOs.RegisterReqDTO;
 import com.example.adsonline.DTOs.UserDTO;
+import com.example.adsonline.entity.NewPassword;
+import com.example.adsonline.entity.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface UserService {
-    UserDTO registerUser(RegisterReqDTO registerReq);
-    UserDTO loginUser(LoginReqDTO loginReq);
-    UserDTO getUserById(int userId);
-    UserDTO updateUser(UserDTO user);
+import java.util.List;
 
-    void setPassword(NewPasswordDTO newPassword);
-    UserDTO updateUserImage(int id, MultipartFile image);
+public interface UserService {
+
+
+    UserDTO mapToDTO(User user);
+
+    User mapToEntity(UserDTO userDTO);
+
+    List<UserDTO> getUserById(int user_Id);
+
+    User findUserByLogin(String username);
+
+    User createOrUpdate(UserDetails userDetails, User updateUser);
+
+    User updateUserPassword(NewPassword newPassword, UserDetails userDetails);
+
+    void updateUserImage(UserDetails id, MultipartFile multipartFile);
+
+    UserDTO getUser(UserDetails userDetails);
 }
