@@ -19,7 +19,7 @@ public class AdsMapperServiceImpl implements AdsMapperService {
     public AdsDTO createAdToAdDTO(Ads ads) {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setPrice(ads.getPrice());
-        adsDTO.setImage(Collections.singletonList("/ads/" + ads.getImage().getId() + "/image"));
+        adsDTO.setImage(Collections.singletonList("/ads/" + ads.getImageRef().getId() + "/image"));
         adsDTO.setTitle(ads.getTitle());
         return adsDTO;
     }

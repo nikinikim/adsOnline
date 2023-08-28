@@ -60,4 +60,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Ads> ads = new LinkedHashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "new_password_id")
+    private NewPassword newPassword;
+
+    @ManyToOne
+    @JoinColumn(name = "register_req_id")
+    private RegisterReq registerReq;
+
 }
