@@ -1,6 +1,8 @@
 package com.example.adsonline.controllers;
 
 import com.example.adsonline.DTOs.*;
+import com.example.adsonline.entity.Ads;
+import com.example.adsonline.exception.NotFoundInDataBaseException;
 import com.example.adsonline.services.AdsService;
 import com.example.adsonline.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,14 +96,27 @@ public class AdsController {
         return ResponseEntity.ok(adsService.createAds(createAdsDTO, image));
     }
     // Получение списка комментариев для конкретного объявления
-//    @GetMapping("/{ad_pk}/comments")
-//    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
-//
-//        List<CommentDTO> comments = adService.getCommentsForAd(adId);
-//        int totalComments = comments.size();
-//        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/{ad_pk}/comments")
+    @Operation(
+            summary = "Получение списка комментариев для конкретного объявления",
+            tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperCommentDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            })
+    public ResponseEntity<ResponseWrapperCommentDTO> getCommentsForAd(@PathVariable("ad_pk") int IdAd) {
+
+        List<CommentDTO> comments = adsService.getCommentsForAd(IdAd);
+        int totalComments = comments.size();
+
+        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
+        // Здесь вы можете добавить полученные комментарии в response
+        return ResponseEntity.ok(response);
+    }
+
 
 
     // Обновление информации о конкретном объявлении
@@ -146,14 +161,14 @@ public class AdsController {
     }
 
     // Получение списка комментариев для конкретного объявления
-//    @GetMapping("/{ad_pk}/comments")
-//    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
-//
-//        List<CommentDTO> comments = adsService.getCommentsForAd(adId);
-//        int totalComments = comments.size();
-//        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/{ad_pk}/comments")
+    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
+
+        List<CommentDTO> comments = adsService.getCommentsForAd(adId);
+        int totalComments = comments.size();
+        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
+        return ResponseEntity.ok(response);
+    }
 
     // Добавление комментария к объявлению
     @PostMapping("/{ad_pk}/comments")
@@ -184,11 +199,11 @@ public class AdsController {
     }
 
     // Удаление конкретного комментария
-//    @DeleteMapping("/{ad_pk}/comments/{id}")
-//    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
-//                                               @PathVariable int id) {
-//
-//        commentService.deleteComment(adId, id);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{ad_pk}/comments/{id}")
+    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
+                                               @PathVariable int id) {
+
+        commentService.deleteComment(adId, id);
+        return ResponseEntity.ok().build();
+    }
 }
