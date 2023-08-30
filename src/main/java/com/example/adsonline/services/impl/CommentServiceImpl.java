@@ -1,13 +1,14 @@
 package com.example.adsonline.services.impl;
 
 import com.example.adsonline.DTOs.CommentDTO;
+import com.example.adsonline.entity.Comment;
+import com.example.adsonline.exception.NotFoundInDataBaseException;
 import com.example.adsonline.mappers.CommentMapper;
 import com.example.adsonline.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.adsonline.repository.CommentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,33 +18,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
-
-//    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
-//        this.commentRepository = commentRepository;
-//        this.commentMapper = commentMapper;
-//    }
-
-//    @Override
-//    public CommentDTO mapToDTO(Comment comment) {
-//        CommentDTO commentDTO = new CommentDTO();
-//        commentDTO.setPk(comment.getPk());
-//        commentDTO.setAuthor(comment.getAuthor());
-//        commentDTO.setText(comment.getText());
-//        commentDTO.setCreatedAt(comment.getCreatedAt());
-//
-//        return commentDTO;
-//    }
-//
-//    @Override
-//    public Comment mapToEntity(CommentDTO commentDTO) {
-//        Comment comment = new Comment();
-//        comment.setPk(commentDTO.getPk());
-//        comment.setAuthor(commentDTO.getAuthor());
-//        comment.setText(commentDTO.getText());
-//        comment.setCreatedAt(commentDTO.getCreatedAt());
-//
-//        return comment;
-//    }
 
     @Override
     public List<CommentDTO> getCommentsByAdId(int adId) {
@@ -57,25 +31,37 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO updateComment(int adId, int commentId, CommentDTO comment) {
-        return new CommentDTO();
+    public CommentDTO updateComment(int adId, long commentId, CommentDTO comment) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Comment not found"));
+
+        throw new IllegalArgumentException("Comment does not belong to the specified ad");
+
     }
 
     @Override
-    public void deleteComment(int adId, int commentId) {
+    public void deleteComment(long IdAds, long commentId) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Comment not found"));
+
+        if (existingComment.getAd().getIdAds() != IdAds) {
+            throw new IllegalArgumentException("Comment does not belong to the specified ad");
+        }
+
+        commentRepository.delete(existingComment);
+
 
     }
 
     @Override
-    public CommentDTO getCommentById(int adId, int commentId) {
-        // Тестовые данные для заглушки
+    public CommentDTO getCommentById(long IdAds, long commentId) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundInDataBaseException("Comment not found"));
 
-        CommentDTO comment = new CommentDTO();
-        comment.setAuthor(1);
-        comment.setCreatedAt("2023-07-27");
-        comment.setPk(1);
-        comment.setText("Test comment");
+        if (existingComment.getAd().getIdAds() != IdAds) {
+            throw new IllegalArgumentException("Comment does not belong to the specified ad");
+        }
 
-        return comment;
+        return commentMapper.toDto(existingComment);
     }
 }

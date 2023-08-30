@@ -1,6 +1,8 @@
 package com.example.adsonline.controllers;
 
 import com.example.adsonline.DTOs.*;
+import com.example.adsonline.entity.Ads;
+import com.example.adsonline.exception.NotFoundInDataBaseException;
 import com.example.adsonline.services.AdsService;
 import com.example.adsonline.services.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -93,16 +96,6 @@ public class AdsController {
                                         @RequestPart("image") MultipartFile image) throws IOException {
         return ResponseEntity.ok(adsService.createAds(createAdsDTO, image));
     }
-    // Получение списка комментариев для конкретного объявления
-//    @GetMapping("/{ad_pk}/comments")
-//    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
-//
-//        List<CommentDTO> comments = adService.getCommentsForAd(adId);
-//        int totalComments = comments.size();
-//        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
-//        return ResponseEntity.ok(response);
-//    }
-
 
     // Обновление информации о конкретном объявлении
     @Operation(
@@ -146,49 +139,156 @@ public class AdsController {
     }
 
     // Получение списка комментариев для конкретного объявления
-//    @GetMapping("/{ad_pk}/comments")
-//    public ResponseEntity<ResponseWrapperCommentDTO> getComments(@PathVariable("ad_pk") int adId) {
-//
-//        List<CommentDTO> comments = adsService.getCommentsForAd(adId);
-//        int totalComments = comments.size();
-//        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/{ad_pk}/comments")
+    @Operation(
+            summary = "Получение списка комментариев для конкретного объявления",
+            tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperCommentDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            })
+    public ResponseEntity<ResponseWrapperCommentDTO> getCommentsForAd(@PathVariable("ad_pk") int adId) {
+
+        List<CommentDTO> comments = commentService.getCommentsByAdId(adId);
+        int totalComments = comments.size();
+
+        ResponseWrapperCommentDTO response = new ResponseWrapperCommentDTO();
+        response.setCount(totalComments);
+        response.setResults(comments);
+
+        return ResponseEntity.ok(response);
+    }
 
     // Добавление комментария к объявлению
     @PostMapping("/{ad_pk}/comments")
-    public ResponseEntity<CommentDTO> addComments(@PathVariable("ad_pk") int adId,
-                                                  @RequestBody CommentDTO comment) {
+    @Operation(
+            summary = "Добавить комментарий к объявлению",
+            tags = "Объявления",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CommentDTO.class))),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Created",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content()),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found",
+                            content = @Content())
+            }
+    )
+    public ResponseEntity<CommentDTO> addComment(
+            @PathVariable("ad_pk") int adId,
+            @Valid @RequestBody CommentDTO comment) {
 
-        CommentDTO newComment = commentService.addComment(adId, comment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
+        try {
+            CommentDTO newComment = commentService.addComment(adId, comment);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
+        } catch (NotFoundInDataBaseException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     // Получение информации о конкретном комментарии
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<CommentDTO> getComments(@PathVariable("ad_pk") int adId,
-                                                  @PathVariable int id) {
+    @Operation(
+            summary = "Получить информацию о конкретном комментарии",
+            tags = "Объявления",
+            parameters = {
+                    @Parameter(name = "ad_pk", description = "Идентификатор объявления", in = ParameterIn.PATH, required = true),
+                    @Parameter(name = "id", description = "Идентификатор комментария", in = ParameterIn.PATH, required = true)
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = CommentDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            }
+    )
+    public ResponseEntity<CommentDTO> getComment(
+            @PathVariable("ad_pk") int adId,
+            @PathVariable int id) {
 
-        CommentDTO comment = commentService.getCommentById(adId, id);
-        return ResponseEntity.ok(comment);
+        try {
+            CommentDTO comment = commentService.getCommentById(adId, id);
+            return ResponseEntity.ok(comment);
+        } catch (NotFoundInDataBaseException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Обновление информации о конкретном комментарии
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<CommentDTO> updateComments(@PathVariable("ad_pk") int adId,
-                                                     @PathVariable int id,
-                                                     @RequestBody CommentDTO commentUpdate) {
+    @Operation(
+            summary = "Обновить информацию о конкретном комментарии",
+            tags = "Объявления",
+            parameters = {
+                    @Parameter(name = "ad_pk", description = "Идентификатор объявления", in = ParameterIn.PATH, required = true),
+                    @Parameter(name = "id", description = "Идентификатор комментария", in = ParameterIn.PATH, required = true)
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CommentDTO.class)
+                    )),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = CommentDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            }
+    )
+    public ResponseEntity<CommentDTO> updateComment(
+            @PathVariable("ad_pk") int adId,
+            @PathVariable int id,
+            @RequestBody CommentDTO commentUpdate) {
 
-        CommentDTO updatedComment = commentService.updateComment(adId, id, commentUpdate);
-        return ResponseEntity.ok(updatedComment);
+        try {
+            CommentDTO updatedComment = commentService.updateComment(adId, id, commentUpdate);
+            return ResponseEntity.ok(updatedComment);
+        } catch (NotFoundInDataBaseException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Удаление конкретного комментария
-//    @DeleteMapping("/{ad_pk}/comments/{id}")
-//    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
-//                                               @PathVariable int id) {
-//
-//        commentService.deleteComment(adId, id);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{ad_pk}/comments/{id}")
+    @Operation(
+            summary = "Удалить конкретный комментарий",
+            tags = "Объявления",
+            parameters = {
+                    @Parameter(name = "ad_pk", description = "Идентификатор объявления", in = ParameterIn.PATH, required = true),
+                    @Parameter(name = "id", description = "Идентификатор комментария", in = ParameterIn.PATH, required = true)
+            },
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            }
+    )
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable("ad_pk") int adId,
+            @PathVariable int id) {
+
+        try {
+            commentService.deleteComment(adId, id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundInDataBaseException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
