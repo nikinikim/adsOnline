@@ -52,7 +52,6 @@ public interface AdsService {
      * @return AdsDTO
      */
     AdsDTO updateAdsDTO(Integer id, CreateAdsDTO createAdsDTO);
-
     /**
      * Метод ищет и возвращает список всех объявлений авторизированного пользователя
      *

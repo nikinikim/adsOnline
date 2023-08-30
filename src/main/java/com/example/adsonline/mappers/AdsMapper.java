@@ -20,7 +20,6 @@ public abstract class AdsMapper implements GeneralMapper<Ads, AdsDTO> {
                     qualifiedByName = "authorMapper")
     })
     public abstract Ads fromDto(AdsDTO adsDTO);
-
     @Override
     @Mapping(source = "author.id", target = "author")
     public abstract AdsDTO toDto(Ads ads);

@@ -157,7 +157,6 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.toDto(ad);
     }
 
-
     private void setImage(MultipartFile image, Ads ads) throws IOException {
         String oldName = ads.getImages().toString();
         String sourceName = image.getOriginalFilename();
