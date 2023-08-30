@@ -268,10 +268,27 @@ public class AdsController {
 
     // Удаление конкретного комментария
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<Void> deleteComments(@PathVariable("ad_pk") int adId,
-                                               @PathVariable int id) {
+    @Operation(
+            summary = "Удалить конкретный комментарий",
+            tags = "Объявления",
+            parameters = {
+                    @Parameter(name = "ad_pk", description = "Идентификатор объявления", in = ParameterIn.PATH, required = true),
+                    @Parameter(name = "id", description = "Идентификатор комментария", in = ParameterIn.PATH, required = true)
+            },
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content())
+            }
+    )
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable("ad_pk") int adId,
+            @PathVariable int id) {
 
-        commentService.deleteComment(adId, id);
-        return ResponseEntity.ok().build();
+        try {
+            commentService.deleteComment(adId, id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundInDataBaseException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
