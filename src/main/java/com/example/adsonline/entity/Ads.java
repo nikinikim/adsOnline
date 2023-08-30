@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,7 +32,7 @@ public class Ads {
      * Стоимость
      */
     @Column(name = "price", precision = 15, scale = 2)
-    private BigDecimal price;
+    private int price;
     /**
      * Описание
      */
@@ -41,7 +42,7 @@ public class Ads {
      * Картинки
      */
     @OneToMany(mappedBy = "ads")
-    private Set<Image> images = new LinkedHashSet<>();
+    private List<Image> images;
     /**
      * Автор
      */

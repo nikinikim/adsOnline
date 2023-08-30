@@ -1,6 +1,7 @@
 package com.example.adsonline.services;
 
 import com.example.adsonline.DTOs.*;
+import com.example.adsonline.entity.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,10 +24,10 @@ public interface AdsService {
      * Метод создает объявление
      *
      * @param adsDTO
-     * @param image
+     * @param file
      * @return AdsDto
      */
-    AdsDTO createAds(CreateAdsDTO adsDTO, MultipartFile image) throws IOException;
+    AdsDTO createAds(CreateAdsDTO adsDTO, MultipartFile file) throws IOException;
 
     /**
      * Метод ищет и возвращает объявление по id
@@ -34,14 +35,14 @@ public interface AdsService {
      * @param id
      * @return FullAdsDTO
      */
-    FullAdsDTO getFullAdsDTO(Integer id);
+    AdsDTO getFullAdsDTO(Integer id);
 
     /**
      * Метод удаляет объявление по id
      *
      * @param id
      */
-    boolean deleteAdsDTO(Integer id);
+    void deleteAdsDTO(Integer id);
 
     /**
      * Метод редактирует объявление по id
@@ -51,7 +52,6 @@ public interface AdsService {
      * @return AdsDTO
      */
     AdsDTO updateAdsDTO(Integer id, CreateAdsDTO createAdsDTO);
-
     /**
      * Метод ищет и возвращает список всех объявлений авторизированного пользователя
      *
@@ -67,13 +67,6 @@ public interface AdsService {
      * @return
      */
     AdsDTO updateImageAdDto(Integer id, MultipartFile image) throws IOException;
-
-    /**
-     * Метод проверяет наличие доступа к объявлению по id
-     *
-     * @param id
-     */
-    boolean checkAccess(Integer id);
 
     List<CommentDTO> getCommentsForAd(int adId);
 }

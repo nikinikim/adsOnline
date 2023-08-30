@@ -5,19 +5,25 @@ import com.example.adsonline.entity.Ads;
 import com.example.adsonline.entity.Image;
 import com.example.adsonline.entity.User;
 import com.example.adsonline.exception.UserForbiddenException;
+import com.example.adsonline.mappers.AdsMapper;
 import com.example.adsonline.repository.AdsRepository;
-import com.example.adsonline.services.AdsMapperService;
+import com.example.adsonline.repository.ImageRepository;
+import com.example.adsonline.repository.UserRepository;
 import com.example.adsonline.services.AdsService;
+import com.example.adsonline.services.CommentService;
 import com.example.adsonline.services.ImageService;
 import com.example.adsonline.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +33,13 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserService userService;
     private final ImageService imageService;
-    private final AdsMapperService adsMapper;
+    private final AdsMapper adsMapper;
+    private final ImageRepository imageRepository;
+    private final CommentService commentService;
+    private final UserRepository userRepository;
+
+
+
 
 
     /**
@@ -37,26 +49,41 @@ public class AdsServiceImpl implements AdsService {
      */
     @Override
     public ResponsesWrapperAdsDTO getAllAdsDTO() {
-        List<AdsDTO> adsAll = adsMapper.createAdListToAdDTOList(adsRepository.findAll());
-        return new ResponsesWrapperAdsDTO();
+        List<Ads> ads = adsRepository.findAll();
+        ResponsesWrapperAdsDTO wrapperAds = new ResponsesWrapperAdsDTO();
+        wrapperAds.setCount(ads.size());
+        wrapperAds.setResults(
+                ads.stream()
+                        .map(adsMapper::toDto)
+                        .collect(Collectors.toList())
+        );
+        //return AdsMapper.INSTANCE.adsModelToAds(a);
+        return wrapperAds;
     }
+
+
+
 
     /**
      * Метод создает объявление
      *
      * @param adsDTO
-     * @param image
+     * @param file
      * @return AdsDto
      */
     @Override
-    public AdsDTO createAds(CreateAdsDTO adsDTO, MultipartFile image) throws IOException {
-        Ads newAd = adsMapper.createdAdsDTOToAd(adsDTO);
-        newAd.setUser(userService.getUserById(newAd.getIdAds()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден")));
-        byte[] newImage = imageService.updateAdImages(newAd.getIdAds(), image);
-        newAd.setImage(new Image());
-        adsRepository.save(newAd);
-        return adsMapper.createAdToAdDTO(newAd);
+    public AdsDTO createAds(CreateAdsDTO adsDTO, MultipartFile file) throws IOException {
+
+        Ads ads = new Ads();
+        Image image = new Image();
+        image.getImageRef();
+        imageRepository.save(image);
+        ads.getImages();
+        ads.setUser(userRepository.getReferenceById(userService.getUserById(ads.getIdAds())));
+        adsRepository.save(ads);
+        return adsMapper.toDto(ads);
     }
+
 
     /**
      * Метод ищет и возвращает объявление по id
@@ -65,9 +92,9 @@ public class AdsServiceImpl implements AdsService {
      * @return FullAdsDto
      */
     @Override
-    public FullAdsDTO getFullAdsDTO(Integer id) {
-        Ads ads = adsRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        return adsMapper.createAdToFullAdsDTO(ads);
+    public AdsDTO getFullAdsDTO(Integer id) {
+        Ads ads = adsRepository.findById(id).orElse(null);
+        return adsMapper.toDto(ads);
     }
 
     /**
@@ -76,12 +103,11 @@ public class AdsServiceImpl implements AdsService {
      * @param id
      */
     @Override
-    public boolean deleteAdsDTO(Integer id) {
-        if (checkAccess(id)) {
-            adsRepository.deleteById(id);
-            return true;
-        }
-        throw new UserForbiddenException();
+    public void deleteAdsDTO(Integer id) {
+
+        imageRepository.delete((Image) adsRepository.findById(id).map(Ads::getImages).orElseThrow());
+        commentService.deleteComment(id);
+        adsRepository.deleteById(id);
     }
 
 
@@ -94,16 +120,15 @@ public class AdsServiceImpl implements AdsService {
      */
     @Override
     public AdsDTO updateAdsDTO(Integer id, CreateAdsDTO createAdsDTO) {
-        Ads ads = adsRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        ;
-        if (checkAccess(id)) {
-            ads.setDescription(createAdsDTO.getDescription());
-            ads.setPrice(createAdsDTO.getPrice());
-            ads.setTitle(createAdsDTO.getTitle());
-            return adsMapper.createAdToAdDTO(adsRepository.save(ads));
-        }
-        throw new UserForbiddenException();
+        Ads ad = adsRepository.findById(id).orElseThrow();
+        ad.setTitle(createAdsDTO.getTitle());
+        ad.setDescription(createAdsDTO.getDescription());
+        ad.setPrice(createAdsDTO.getPrice());
+        adsRepository.save(ad);
+
+        return adsMapper.toDto(ad);
     }
+
 
     /**
      * Метод ищет и возвращает список всех объявлений авторизированного пользователя
@@ -112,10 +137,7 @@ public class AdsServiceImpl implements AdsService {
      */
     @Override
     public ResponsesWrapperAdsDTO getAllUserAdsDTO() {
-        User user = userService.getUserById(getAllUserAdsDTO().getCount()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        ;
-        List<Ads> allAds = adsRepository.findAll();
-        List<Ads> userAds = allAds.stream().filter(x -> x.user.getLastName().equals(user)).collect(Collectors.toList());
+        List<AdsDTO> adsAll = Collections.singletonList(adsMapper.toDto((Ads) adsRepository.findAll()));
         return new ResponsesWrapperAdsDTO();
     }
 
@@ -127,31 +149,30 @@ public class AdsServiceImpl implements AdsService {
      * @return
      */
     @Override
-    public AdsDTO updateImageAdDto(Integer id, MultipartFile image) throws IOException {
+    public AdsDTO updateImageAdDto(Integer id, MultipartFile image) throws IOException{
         Ads ad = adsRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        byte[] updatedImage = imageService.updateAdImages(ad.getIdAds(), image);
-        ad.setImage(new Image());
+        byte[] updatedImage = imageService.updateAdImages(Math.toIntExact(ad.getIdAds()), image);
+        ad.setImages((List<Image>) new Image());
         adsRepository.save(ad);
-        return adsMapper.createAdToAdDTO(ad);
+        return adsMapper.toDto(ad);
     }
 
-
-    /**
-     * Метод проверяет наличие доступа к объявлению по id
-     *
-     * @param id
-     */
-    @Override
-    public boolean checkAccess(Integer id) {
-        RoleDTO role = RoleDTO.ADMIN;
-        Ads ads = adsRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        ;
-        Optional<User> user = userService.getUserById(ads.getIdAds());
-        User notOptionalUser = user.get();
-        String currentPrincipalName = notOptionalUser.getFirstName();
-        return ads.getUser().getFirstName().equals(currentPrincipalName);
-
+    private void setImage(MultipartFile image, Ads ads) throws IOException {
+        String oldName = ads.getImages().toString();
+        String sourceName = image.getOriginalFilename();
+        String fileName = ads.getIdAds() + sourceName.substring(sourceName.lastIndexOf("."));
+        Path path = Path.of(String.valueOf(image)).resolve(fileName);
+        try {
+            if (oldName != null) {
+                Files.deleteIfExists(Path.of(oldName));
+            }
+        } catch (IOException e) {
+            throw new IOException("Ad's image was not saved", e);
+        }
+        ads.setImages((List<Image>) image);
+        adsRepository.save(ads);
     }
+
 
     @Override
     public List<CommentDTO> getCommentsForAd(int adId) {
