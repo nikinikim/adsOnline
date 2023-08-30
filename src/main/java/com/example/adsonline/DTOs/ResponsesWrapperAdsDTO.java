@@ -7,7 +7,7 @@ public class ResponsesWrapperAdsDTO {
     private int count;
     private List<AdsDTO> results;
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
