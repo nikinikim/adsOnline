@@ -5,12 +5,12 @@ import com.example.adsonline.DTOs.UserDTO;
 import com.example.adsonline.entity.NewPassword;
 import com.example.adsonline.entity.User;
 import com.example.adsonline.exception.NotFoundInDataBaseException;
-import com.example.adsonline.mappers.UserMapper;
+import com.example.adsonline.mappers.UserMappers;
 import com.example.adsonline.repository.UserRepository;
 import com.example.adsonline.services.UserService;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,50 +26,17 @@ import java.util.stream.Collectors;
 import static org.springframework.http.RequestEntity.patch;
 
 @Service
+@Data
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private final UserMapper userMapper;
+    private final UserMappers userMappers;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserDTO mapToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setCity(user.getCity());
-        userDTO.setPhone(user.getPhone());
-        userDTO.setImage(user.getImageRef());
-        userDTO.setRegDate(user.getRegDate());
-
-        return userDTO;
-    }
-
-    @Override
-    public User mapToEntity(UserDTO userDTO) {
-        User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setCity(userDTO.getCity());
-        user.setPhone(userDTO.getPhone());
-        user.setImageRef(userDTO.getImage());
-        user.setRegDate(userDTO.getRegDate());
-
-        return user;
-    }
 
     @Override
     public List<UserDTO> getUserById(int user_Id) {
-        return userRepository.findAllUser_Id(user_Id).stream().map(userMapper::toDto).collect(Collectors.toList());
+        return userRepository.findAllUser_Id(user_Id).stream().map(userMappers::toDto).collect(Collectors.toList());
     }
     @Override
     public User findUserByLogin(String username) {
@@ -91,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserPassword(NewPassword newPassword, UserDetails userDetails) {
         User userEntity = findUserByLogin(userDetails.getUsername());
-        userEntity.setNewPassword(passwordEncoder.encode(newPassword.getNewPassword()));
+        newPassword.setNewPassword(passwordEncoder.encode(newPassword.getNewPassword()));
         System.out.println(userEntity);
         logger.debug("User password updated");
         return userEntity;
@@ -112,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser(UserDetails userDetails) {
-        return userMapper.toDto(
+        return userMappers.toDto(
                 findUserByLogin(
                         userDetails.getUsername()));
     }

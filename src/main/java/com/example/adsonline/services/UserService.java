@@ -10,11 +10,6 @@ import java.util.List;
 
 public interface UserService {
 
-
-    UserDTO mapToDTO(User user);
-
-    User mapToEntity(UserDTO userDTO);
-
     List<UserDTO> getUserById(int user_Id);
 
     User findUserByLogin(String username);

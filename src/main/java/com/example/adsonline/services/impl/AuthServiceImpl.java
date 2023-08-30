@@ -20,32 +20,6 @@ public class AuthServiceImpl implements AuthService {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
     }
-
-    @Override
-    public RegisterReqDTO mapToDTO(RegisterReq registerReq) {
-        RegisterReqDTO registerReqDTO = new RegisterReqDTO();
-        registerReqDTO.setUsername(registerReq.getUsername());
-        registerReqDTO.setFirstName(registerReq.getFirstName());
-        registerReqDTO.setLastName(registerReq.getLastName());
-        registerReqDTO.setPassword(registerReq.getPassword());
-        registerReqDTO.setPhone(registerReq.getPhone());
-
-
-        return registerReqDTO;
-    }
-
-    @Override
-    public RegisterReq mapToEntity(RegisterReqDTO registerReqDTO) {
-        RegisterReq registerReq = new RegisterReq();
-        registerReq.setUsername(registerReqDTO.getUsername());
-        registerReq.setFirstName(registerReqDTO.getFirstName());
-        registerReq.setLastName(registerReqDTO.getLastName());
-        registerReq.setPassword(registerReqDTO.getPassword());
-        registerReq.setPhone(registerReqDTO.getPhone());
-
-        return registerReq;
-    }
-
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
