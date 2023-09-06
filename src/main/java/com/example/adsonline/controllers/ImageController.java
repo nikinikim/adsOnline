@@ -1,30 +1,32 @@
 package com.example.adsonline.controllers;
 
 import com.example.adsonline.services.ImageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/images")
+@RequiredArgsConstructor
+@RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
+@Tag(name = "Изображения", description = "Изображения")
 public class ImageController {
 
     private final ImageService imageService;
 
-    public ImageController(ImageService imageService) {
-        this.imageService = imageService;
-    }
-
     // Обновление изображения объявления по идентификатору
-    @PatchMapping("/{id}")
-    public ResponseEntity<byte[]> updateAdsImage(@PathVariable int id, @RequestParam("image") MultipartFile image) throws IOException {
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<String>> updateAdsImage(@PathVariable int id, @RequestParam MultipartFile image) {
 
-        byte[] updatedImage = imageService.updateAdImages(id, image);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(updatedImage);
+        imageService.updateAdImages(id, image);
+
+        return ResponseEntity.ok(List.of(String.format("/images-ads/%s/", id,image.getOriginalFilename())));//.contentType(MediaType.APPLICATION_OCTET_STREAM).body(updatedImage);
     }
 }

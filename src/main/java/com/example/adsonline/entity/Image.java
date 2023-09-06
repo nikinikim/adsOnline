@@ -14,15 +14,16 @@ public class Image {
      * Идентификатор
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
     /**
      * Объявление
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ad_id", nullable = false)
-    private Ads ad;
+    @JoinColumn(name = "ads_id", nullable = false)
+    private Ads ads;
     /**
      * Ссылка на картинку
      */

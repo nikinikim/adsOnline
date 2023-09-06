@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ImageService {
-    byte[] updateAdImages(int adId, MultipartFile image) throws IOException;
+    void updateAdImages(int adId, MultipartFile image);
 }
