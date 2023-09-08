@@ -5,7 +5,7 @@ databaseChangeLog:
       author: andrew
       changes:
         - createTable:
-            tableName: user
+            tableName: users
             columns:
               - column:
                   name: id
@@ -13,6 +13,11 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar
+                  constraints:
                     nullable: false
               - column:
                   name: first_name
@@ -33,10 +38,20 @@ databaseChangeLog:
                   name: city
                   type: varchar
               - column:
-                  name: image_ref
+                  name: image
                   type: varchar
+              - column:
+                  name: password
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar
+                  constraints:
+                    nullable: false
         - createTable:
-            tableName: ad
+            tableName: ads
             columns:
               - column:
                   name: id
@@ -53,11 +68,11 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user
-                    references: user(id)
+                    foreignKeyName: fk_users
+                    references: users(id)
               - column:
                   name: price
-                  type: decimal(15,2)
+                  type: int
               - column:
                   name: description
                   type: text
@@ -72,12 +87,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: ad_id
+                  name: ads_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_ad
-                    references: ad(id)
+                    foreignKeyName: fk_ads
+                    references: ads(id)
               - column:
                   name: image_ref
                   type: varchar
@@ -92,19 +107,19 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: ad_id
+                  name: ads_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_ad
-                    references: ad(id)
+                    foreignKeyName: fk_ads
+                    references: ads(id)
               - column:
                   name: author_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user
-                    references: user(id)
+                    foreignKeyName: fk_users
+                    references: users(id)
               - column:
                   name: created_at
                   type: varchar
