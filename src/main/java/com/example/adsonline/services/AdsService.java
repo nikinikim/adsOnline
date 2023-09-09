@@ -5,6 +5,7 @@ import com.example.adsonline.entity.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -18,16 +19,17 @@ public interface AdsService {
      *
      * @return ResponseWrapperAdsDTO
      */
-    ResponsesWrapperAdsDTO getAllAdsDTO();
+    ResponsesWrapperAdsDTO getAllAds();
+    ResponsesWrapperAdsDTO getAllAdsMe(Principal principal);
 
     /**
      * Метод создает объявление
      *
      * @param adsDTO
-     * @param file
+     * @param principal
      * @return AdsDto
      */
-    AdsDTO createAds(CreateAdsDTO adsDTO, MultipartFile file) throws IOException;
+    AdsDTO createAds(String adsDTO, Principal principal);
 
     /**
      * Метод ищет и возвращает объявление по id
@@ -35,7 +37,7 @@ public interface AdsService {
      * @param id
      * @return FullAdsDTO
      */
-    AdsDTO getFullAdsDTO(Integer id);
+    FullAdsDTO getFullAdsDTO(Integer id);
 
     /**
      * Метод удаляет объявление по id
@@ -52,21 +54,4 @@ public interface AdsService {
      * @return AdsDTO
      */
     AdsDTO updateAdsDTO(Integer id, CreateAdsDTO createAdsDTO);
-    /**
-     * Метод ищет и возвращает список всех объявлений авторизированного пользователя
-     *
-     * @return ResponsesWrapperAdsDTO
-     */
-    ResponsesWrapperAdsDTO getAllUserAdsDTO();
-
-    /**
-     * Метод обновляет изображение к объявлению по id
-     *
-     * @param id
-     * @param image
-     * @return
-     */
-    AdsDTO updateImageAdDto(Integer id, MultipartFile image) throws IOException;
-
-    List<CommentDTO> getCommentsForAd(int adId);
 }

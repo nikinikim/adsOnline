@@ -14,5 +14,5 @@ public interface AdsRepository extends JpaRepository<Ads, Integer> {
 
     List<Ads> findByTitle(String tittle);
 
-
+    List<Ads> findAllByUser_UserName(String userName);
 }

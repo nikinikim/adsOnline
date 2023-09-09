@@ -22,7 +22,7 @@ public class Ads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAds", nullable = false)
-    private Long idAds;
+    private Integer idAds;
     /**
      * Заголовок объявления
      */
