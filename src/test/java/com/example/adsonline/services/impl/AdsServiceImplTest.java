@@ -5,7 +5,7 @@ import com.example.adsonline.DTOs.CreateAdsDTO;
 import com.example.adsonline.DTOs.FullAdsDTO;
 import com.example.adsonline.DTOs.ResponsesWrapperAdsDTO;
 import com.example.adsonline.entity.Ads;
-import com.example.adsonline.entity.User;
+import com.example.adsonline.entity.Users;
 import com.example.adsonline.exception.AdsNotFoundException;
 import com.example.adsonline.mappers.AdsMapper;
 import com.example.adsonline.repository.AdsRepository;
@@ -39,8 +39,8 @@ public class AdsServiceImplTest {
     private final String DIF_FIRST_NAME = "differentFirstName@mail.com";
     private final String LAST_NAME = "testLastName";
     private final String DIF_LAST_NAME = "differentTestLastName";
-    private final User testUser = new User();
-    private final User diffUser = new User();
+    private final Users testUser = new Users();
+    private final Users diffUser = new Users();
     private final Ads testAd = new Ads();
     private final CreateAdsDTO createAdsDto = new CreateAdsDTO();
 

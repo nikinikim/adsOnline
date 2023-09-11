@@ -1,24 +1,36 @@
 package com.example.adsonline.entity;
 
+import com.example.adsonline.enums.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class Users {
     /**
      * Идентификатор
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
+    /**
+     * Логин
+     */
+    @Column(name = "user_name", nullable = false, unique = true, length = Integer.MAX_VALUE)
+    private String userName;
+    /**
+     * Пароль
+     */
+    @Column(name = "password", nullable = false, length = Integer.MAX_VALUE)
+    private String password;
     /**
      * Имя пользователя
      */
@@ -52,20 +64,24 @@ public class User {
     /**
      * Ссылка на фото пользователя
      */
-    @Column(name = "image_ref", length = Integer.MAX_VALUE)
-    private String imageRef;
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private String image;
     /**
      * Объявления пользователя
      */
     @OneToMany(mappedBy = "user")
     private Set<Ads> ads = new LinkedHashSet<>();
+    /**
+     * Роли пользователя
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Roles role;
 
-    @ManyToOne
-    @JoinColumn(name = "new_password_id")
-    private NewPassword newPassword;
+    public <E> Users(String username, String password, ArrayList<E> es) {
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "register_req_id")
-    private RegisterReq registerReq;
+    public Users() {
 
+    }
 }

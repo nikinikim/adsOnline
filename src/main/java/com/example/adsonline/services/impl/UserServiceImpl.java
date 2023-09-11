@@ -1,87 +1,120 @@
 package com.example.adsonline.services.impl;
 
 
+
+import com.example.adsonline.DTOs.NewPasswordDTO;
+import com.example.adsonline.DTOs.RegisterReqDTO;
 import com.example.adsonline.DTOs.UserDTO;
-import com.example.adsonline.entity.NewPassword;
-import com.example.adsonline.entity.User;
+import com.example.adsonline.entity.Users;
+import com.example.adsonline.exception.BusinessLogicException;
 import com.example.adsonline.exception.NotFoundInDataBaseException;
-import com.example.adsonline.mappers.UserMappers;
+import com.example.adsonline.mappers.UserMapper;
 import com.example.adsonline.repository.UserRepository;
+import com.example.adsonline.services.FileService;
 import com.example.adsonline.services.UserService;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.*;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.http.RequestEntity.patch;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserMappers userMappers;
-    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final FileService fileService;
 
 
     @Override
-    public List<UserDTO> getUserById(int user_Id) {
-        return userRepository.findAllUser_Id(user_Id).stream().map(userMappers::toDto).collect(Collectors.toList());
+    @Transactional
+    public UserDTO create(RegisterReqDTO registerReqDTO) {
+        Users user = userMapper.fromRegisterReqDTO(registerReqDTO);
+        return userMapper.toDto(userRepository.saveAndFlush(user));
     }
+
     @Override
-    public User findUserByLogin(String username) {
+    @Transactional(readOnly = true)
+    public Users findUserByLogin(String username) {
         logger.debug("Find user entity by login, {}", username);
-        return userRepository.findUserByUsername(username)
+        return userRepository.findUsersByUserName(username)
                 .orElseThrow(NotFoundInDataBaseException::new);
     }
-    @Override
-    public User createOrUpdate(UserDetails userDetails, User updateUser) {
-        User userEntity = findUserByLogin(userDetails.getUsername());
-        userEntity.setFirstName(updateUser.getFirstName());
-        userEntity.setLastName(updateUser.getLastName());
-        userEntity.setPhone(updateUser.getPhone());
-        patch(String.valueOf(userEntity));
-        logger.debug("User updated, {}", userEntity.getRegisterReq().getUsername());
-        return updateUser;
-    }
+
 
     @Override
-    public User updateUserPassword(NewPassword newPassword, UserDetails userDetails) {
-        User userEntity = findUserByLogin(userDetails.getUsername());
-        newPassword.setNewPassword(passwordEncoder.encode(newPassword.getNewPassword()));
-        System.out.println(userEntity);
-        logger.debug("User password updated");
-        return userEntity;
-    }
-
-    @Override
-    public void updateUserImage(UserDetails id, MultipartFile multipartFile) {
-        String imageUser = "image.jpg";
-        try {
-            File imageFile = new File(imageUser);
-            byte[] imageData = Files.readAllBytes(imageFile.toPath());
-            ImageIcon imageIcon = new ImageIcon(imageData);
-            JLabel imageLabel = new JLabel(imageIcon);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void updateUserPassword(NewPasswordDTO newPassword, Principal principal) {
+        UserDetails userDetails = loadUserByUsername(principal.getName());
+        if (!newPassword.getCurrentPassword().equals(userDetails.getPassword())) {
+            throw new BusinessLogicException("Current password incorrect", HttpStatus.BAD_REQUEST);
         }
+        Users userEntity = findUserByLogin(principal.getName());
+        userEntity.setPassword(newPassword.getNewPassword());
+        logger.debug("User password updated");
     }
 
     @Override
-    public UserDTO getUser(UserDetails userDetails) {
-        return userMappers.toDto(
+    @Transactional
+    public void updateUserImage(Principal principal, MultipartFile multipartFile) {
+        Users user = userRepository.findUsersByUserName(principal.getName()).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("Пользователь '%s' не найден", principal.getName())));
+        String ref;
+        try {
+            ref = fileService.upload(String.format("images-%s",user.getClass().getSimpleName()), String.valueOf(user.getId()), multipartFile.getOriginalFilename(), multipartFile.getBytes());
+        } catch (IOException e) {
+            throw new BusinessLogicException("Файл не загружен", HttpStatus.BAD_REQUEST);
+        }
+        user.setImage(ref);
+        userRepository.saveAndFlush(user);
+
+    }
+
+    @Override
+    public UserDTO getUser(Principal principal) {
+        return userMapper.toDto(
                 findUserByLogin(
-                        userDetails.getUsername()));
+                        principal.getName()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isExist(String userName) {
+        return userRepository.existsUsersByUserName(userName);
+
+    }
+
+    @Override
+    @Transactional
+    public UserDTO updateUser(UserDTO userDTO, Principal principal) {
+        Users user = userRepository.findUsersByUserName(principal.getName()).orElseThrow();
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setPhone(userDTO.getPhone());
+        return userMapper.toDto(userRepository.saveAndFlush(user));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users user = userRepository.findUsersByUserName(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("Пользователь '%s' не найден", username)));
+        return new User(
+                user.getUserName(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority(user.getRole().toString()))
+        );
+
     }
 }
 

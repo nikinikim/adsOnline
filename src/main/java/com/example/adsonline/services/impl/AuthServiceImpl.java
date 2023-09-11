@@ -1,9 +1,12 @@
 package com.example.adsonline.services.impl;
 
 import com.example.adsonline.DTOs.RegisterReqDTO;
-import com.example.adsonline.DTOs.RoleDTO;
-import com.example.adsonline.entity.RegisterReq;
+import com.example.adsonline.enums.Roles;
 import com.example.adsonline.services.AuthService;
+import com.example.adsonline.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,38 +15,39 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    private final UserDetailsManager manager;
+    private final UserService userService;
     private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(UserDetailsManager manager) {
-        this.manager = manager;
-        this.encoder = new BCryptPasswordEncoder();
-    }
+
+
+    /**
+     * Метод для авторизации пользователя
+     * @param userName
+     * @param password
+     * @return
+     */
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (!userService.isExist(userName)) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
         String encryptedPassword = userDetails.getPassword();
-        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
-        return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
+        return encoder.matches(password, encryptedPassword);
     }
 
+    /**
+     * Метод для регистрации пользователя
+     * @param registerReqDTO
+     * @return
+     */
     @Override
-    public boolean register(RegisterReqDTO registerReqDTO, RoleDTO roleDTO) {
-        if (manager.userExists(registerReqDTO.getUsername())) {
-            return false;
-        }
-        //noinspection deprecation
-        manager.createUser(
-                User.withDefaultPasswordEncoder()
-                        .password(registerReqDTO.getPassword())
-                        .username(registerReqDTO.getUsername())
-                        .roles(roleDTO.name())
-                        .build()
-        );
+    public boolean register(RegisterReqDTO registerReqDTO) {
+        userService.create(registerReqDTO);
         return true;
     }
 }
