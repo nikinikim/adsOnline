@@ -1,24 +1,68 @@
 package com.example.adsonline.services;
 
+import com.example.adsonline.DTOs.NewPasswordDTO;
+import com.example.adsonline.DTOs.RegisterReqDTO;
 import com.example.adsonline.DTOs.UserDTO;
-import com.example.adsonline.entity.NewPassword;
-import com.example.adsonline.entity.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.example.adsonline.entity.Users;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.security.Principal;
 
-public interface UserService {
+/**
+ * Интерфейс сервисного класса UserServiceImpl, содержащий набор CRUD операций над объектом User
+ */
 
-    List<UserDTO> getUserById(int user_Id);
 
-    User findUserByLogin(String username);
+public interface UserService extends UserDetailsService {
+    /**
+     * Метод регистрации пользователя
+     * @param registerReqDTO
+     * @return
+     */
+    UserDTO create(RegisterReqDTO registerReqDTO);
 
-    User createOrUpdate(UserDetails userDetails, User updateUser);
+    /**
+     * Метод поиска пользователя по логину
+     * @param username
+     * @return
+     */
 
-    User updateUserPassword(NewPassword newPassword, UserDetails userDetails);
+    Users findUserByLogin(String username);
 
-    void updateUserImage(UserDetails id, MultipartFile multipartFile);
+    /**
+     * Метод изменение пароля
+     * @param newPassword
+     * @param principal
+     */
+    void updateUserPassword(NewPasswordDTO newPassword, Principal principal);
 
-    UserDTO getUser(UserDetails userDetails);
+    /**
+     * Метод загрузки аватара
+     * @param principal
+     * @param multipartFile
+     */
+    void updateUserImage(Principal principal, MultipartFile multipartFile);
+
+    /**
+     * Метод получения пользователей
+     * @param principal
+     * @return
+     */
+    UserDTO getUser(Principal principal);
+
+    /**
+     * Метод
+     * @param userName
+     * @return
+     */
+    boolean isExist(String userName);
+
+    /**
+     * Метод
+     * @param userDTO
+     * @param principal
+     * @return
+     */
+    UserDTO updateUser(UserDTO userDTO, Principal principal);
 }

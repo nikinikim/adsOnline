@@ -1,15 +1,26 @@
 package com.example.adsonline.services;
 
-import com.example.adsonline.DTOs.LoginReqDTO;
 import com.example.adsonline.DTOs.RegisterReqDTO;
-import com.example.adsonline.DTOs.RoleDTO;
-import com.example.adsonline.DTOs.UserDTO;
-import com.example.adsonline.entity.RegisterReq;
+import com.example.adsonline.enums.Roles;
 
+/**
+ * Интерфейс сервисного класса AuthServiceImpl, содержащий набор CRUD операций над объектом Auth
+ *
+ */
 public interface AuthService {
-
+    /**
+     * Метод для авторизации пользователя
+     * @param userName
+     * @param password
+     * @return
+     */
     boolean login(String userName, String password);
 
-    boolean register(RegisterReqDTO registerReqDTO, RoleDTO roleDTO);
+    /**
+     * Метод для регистрации пользователя
+     * @param registerReqDTO
+     * @return
+     */
+    boolean register(RegisterReqDTO registerReqDTO);
 
 }
