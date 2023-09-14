@@ -40,8 +40,7 @@ public class ImageServiceImpl implements ImageService {
         if (imageRepository.existsImageByAds_Id(adId)) {
             file = imageRepository.findImageByAds_Id(adId).orElseThrow();
         }
-        //Image foundFile = imageRepository.findImageByAds_Id(adId).orElseThrow();
-        //Image file = new Image();
+
         file.setAds(ads);
         file.setImageRef(ref);
         imageRepository.saveAndFlush(file);
