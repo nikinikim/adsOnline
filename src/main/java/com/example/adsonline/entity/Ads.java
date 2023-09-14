@@ -21,8 +21,8 @@ public class Ads {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idAds", nullable = false)
-    private Integer idAds;
+    @Column(name = "id", nullable = false)
+    private Integer id;
     /**
      * Заголовок объявления
      */
@@ -32,7 +32,7 @@ public class Ads {
      * Стоимость
      */
     @Column(name = "price", precision = 15, scale = 2)
-    private int price;
+    private Integer price;
     /**
      * Описание
      */
@@ -41,14 +41,18 @@ public class Ads {
     /**
      * Картинки
      */
-    @OneToMany(mappedBy = "ads")
-    private List<Image> images;
+    @OneToMany(mappedBy = "ads",orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+    private Set<Image> images = new LinkedHashSet<>();
     /**
      * Автор
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
+    private Users user;
+    /**
+     * Комментарии
+     */
+    @OneToMany(mappedBy = "ads",orphanRemoval = true, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+    private List<Comment> comments;
 }

@@ -1,25 +1,12 @@
 package com.example.adsonline.DTOs;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class ResponsesWrapperAdsDTO {
 
     private int count;
     private List<AdsDTO> results;
-
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public List<AdsDTO> getResults() {
-        return results;
-    }
-
-    public void setResults(List<AdsDTO> results) {
-        this.results = results;
-    }
 }

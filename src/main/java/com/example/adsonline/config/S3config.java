@@ -13,9 +13,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class S3config {
 
+    /**
+     * Конфигурирует и возвращает экземпляр AmazonS3 для работы с хранилищем S3.
+     *
+     * @param s3Properties Параметры конфигурации S3, включая accessKey, secretKey, url и port.
+     * @return Экземпляр AmazonS3, настроенный в соответствии с переданными параметрами.
+     */
     @Bean
     public AmazonS3 s3(S3Properties s3Properties) {
         AWSCredentials credentials = new BasicAWSCredentials(s3Properties.getAccessKey(), s3Properties.getSecretKey());

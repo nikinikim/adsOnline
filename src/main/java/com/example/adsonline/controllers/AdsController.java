@@ -222,7 +222,7 @@ public class AdsController {
             Principal principal) {
 
         try {
-            CommentDTO newComment = commentService.addComment(adId, comment);
+            CommentDTO newComment = commentService.addComment(adId, comment, principal);
             return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
         } catch (NotFoundInDataBaseException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
