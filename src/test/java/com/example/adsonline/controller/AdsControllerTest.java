@@ -8,6 +8,7 @@ import com.example.adsonline.entity.Comment;
 import com.example.adsonline.services.AdsService;
 import com.example.adsonline.services.CommentService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -63,6 +64,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка получения всех объявлений")
     public void getAllAdsTest() {
         List<AdsDTO> adsDTOList = Collections.singletonList(new AdsDTO());
         ResponsesWrapperAdsDTO adsDTO = new ResponsesWrapperAdsDTO();
@@ -78,6 +80,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка добавлениянового объявления")
     public void addAdTest() throws Exception {
         AdsDTO adsDTO = new AdsDTO();
         MultipartFile image = new MockMultipartFile("test.jpg", "test.jpg",
@@ -95,6 +98,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка получения комментария к объявлению")
     public void getCommentsTest() {
         List<CommentDTO> commentDtoList = Collections.singletonList(new CommentDTO());
         ResponseWrapperCommentDTO comments = new ResponseWrapperCommentDTO();
@@ -111,6 +115,7 @@ public class AdsControllerTest {
 
 
     @Test
+    @DisplayName("Проверка удаления объявления")
     public void removeAdTest() {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setTitle("New Title");
@@ -124,6 +129,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка обновления объявления")
     public void updateAdTest() {
         AdsDTO adsDTO = new AdsDTO();
         adsDTO.setTitle("New Title");
@@ -141,6 +147,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка удаления определенного комментария")
     public void deleteCommentWithOkTest() {
         CommentDTO newCommentDto = new CommentDTO();
         newCommentDto.setPk(1);
@@ -154,6 +161,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка обновления комментария")
     public void updateCommentTest() {
         CommentDTO newCommentDto = new CommentDTO();
         newCommentDto.setPk(1);
@@ -173,6 +181,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @DisplayName("Проверка получения комментария авторизованного пользователя")
     public void getAdsMeTest() {
         List<AdsDTO> adsDTOList = Collections.singletonList(new AdsDTO());
         ResponsesWrapperAdsDTO adsDTO = new ResponsesWrapperAdsDTO();
